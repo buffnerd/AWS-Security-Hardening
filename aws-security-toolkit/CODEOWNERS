@@ -1,0 +1,4 @@
+* @security-team
+src/aws_sec_toolkit/core/ @platform-team @security-team
+infra/ @devops-team @security-team
+docs/ @documentation-team @security-team

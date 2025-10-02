@@ -1,0 +1,43 @@
+{
+  "timestamp": "2024-10-02T14:45:00Z",
+  "scan_type": "cloudtrail_status", 
+  "results": {
+    "us-east-1": {
+      "status": "ENABLED",
+      "trail_name": "org-secure-trail",
+      "trail_arn": "arn:aws:cloudtrail:us-east-1:123456789012:trail/org-secure-trail",
+      "is_multi_region": true,
+      "is_logging": true,
+      "s3_bucket": "cloudtrail-logs-123456789012-a1b2c3d4",
+      "include_global_service_events": true,
+      "is_organization_trail": false
+    },
+    "us-west-2": {
+      "status": "ENABLED", 
+      "trail_name": "org-secure-trail",
+      "trail_arn": "arn:aws:cloudtrail:us-west-2:123456789012:trail/org-secure-trail",
+      "is_multi_region": true,
+      "is_logging": true,
+      "s3_bucket": "cloudtrail-logs-123456789012-a1b2c3d4",
+      "include_global_service_events": false,
+      "is_organization_trail": false
+    },
+    "eu-west-1": {
+      "status": "ENABLED",
+      "trail_name": "org-secure-trail", 
+      "trail_arn": "arn:aws:cloudtrail:eu-west-1:123456789012:trail/org-secure-trail",
+      "is_multi_region": true,
+      "is_logging": true,
+      "s3_bucket": "cloudtrail-logs-123456789012-a1b2c3d4",
+      "include_global_service_events": false,
+      "is_organization_trail": false
+    }
+  },
+  "summary": {
+    "total_regions": 3,
+    "enabled_regions": 3,
+    "multi_region_trails": 1,
+    "logging_enabled": 3,
+    "coverage_percentage": 100
+  }
+}

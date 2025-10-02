@@ -1,0 +1,65 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'EventBridge scheduler for CloudTrail enablement'
+
+Parameters:
+  ScheduleExpression:
+    Type: String
+    Default: 'rate(7 days)'
+    Description: 'EventBridge schedule expression'
+
+Resources:
+  CloudTrailSchedulerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: InvokeLambdaPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource: !GetAtt CloudTrailLambdaFunction.Arn
+
+  CloudTrailLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: aws-security-toolkit-cloudtrail
+      Runtime: python3.9
+      Handler: aws_sec_toolkit.lambda_handlers.handler_cloudtrail.lambda_handler
+      Code:
+        ZipFile: |
+          # Placeholder - replace with actual deployment package
+          def lambda_handler(event, context):
+              return {'statusCode': 200, 'body': 'Not implemented'}
+      Timeout: 300
+
+  CloudTrailScheduleRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: 'Scheduled CloudTrail enablement'
+      ScheduleExpression: !Ref ScheduleExpression
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt CloudTrailLambdaFunction.Arn
+          Id: CloudTrailTarget
+
+  CloudTrailLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref CloudTrailLambdaFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt CloudTrailScheduleRule.Arn
+
+Outputs:
+  LambdaFunctionArn:
+    Description: 'CloudTrail Lambda Function ARN'
+    Value: !GetAtt CloudTrailLambdaFunction.Arn

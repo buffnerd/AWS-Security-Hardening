@@ -1,0 +1,56 @@
+{
+  "timestamp": "2024-10-02T14:35:00Z",
+  "scan_type": "security_group_audit",
+  "results": {
+    "us-east-1": [
+      {
+        "GroupId": "sg-0123456789abcdef0",
+        "GroupName": "web-servers",
+        "VpcId": "vpc-12345678",
+        "IssueType": "open_port",
+        "Port": 22,
+        "Protocol": "tcp",
+        "Source": "0.0.0.0/0",
+        "Severity": "HIGH",
+        "Description": "SSH port open to internet"
+      },
+      {
+        "GroupId": "sg-abcdef0123456789a",
+        "GroupName": "database-servers", 
+        "VpcId": "vpc-87654321",
+        "IssueType": "open_port",
+        "Port": 3306,
+        "Protocol": "tcp", 
+        "Source": "0.0.0.0/0",
+        "Severity": "CRITICAL",
+        "Description": "MySQL port open to internet"
+      }
+    ],
+    "us-west-2": [
+      {
+        "GroupId": "sg-9876543210fedcba0",
+        "GroupName": "app-servers",
+        "VpcId": "vpc-abcdef12",
+        "IssueType": "open_port",
+        "Port": 3389,
+        "Protocol": "tcp",
+        "Source": "0.0.0.0/0", 
+        "Severity": "HIGH",
+        "Description": "RDP port open to internet"
+      }
+    ],
+    "eu-west-1": []
+  },
+  "summary": {
+    "total_regions_scanned": 3,
+    "regions_with_issues": 2,
+    "total_security_groups_with_issues": 3,
+    "total_issues": 3,
+    "severity_breakdown": {
+      "CRITICAL": 1,
+      "HIGH": 2,
+      "MEDIUM": 0,
+      "LOW": 0
+    }
+  }
+}

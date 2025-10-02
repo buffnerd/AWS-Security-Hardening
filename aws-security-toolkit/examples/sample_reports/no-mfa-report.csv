@@ -1,0 +1,5 @@
+UserName,HasMFA,AccessKeysActive,LastActivity,CreationDate,PasswordLastUsed,MFADevices
+john.developer,false,2,2024-09-28T10:30:00Z,2023-05-15T09:00:00Z,2024-09-28T08:45:00Z,0
+sarah.analyst,false,1,2024-09-25T16:20:00Z,2023-08-20T14:30:00Z,2024-09-25T15:10:00Z,0
+legacy-service-account,false,1,2024-10-01T02:15:00Z,2022-01-10T12:00:00Z,Never,0
+temp-contractor-bob,false,0,2024-09-20T11:45:00Z,2024-09-01T09:30:00Z,2024-09-20T11:30:00Z,0

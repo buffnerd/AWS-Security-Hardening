@@ -1,0 +1,65 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'EventBridge scheduler for S3 Block Public Access'
+
+Parameters:
+  ScheduleExpression:
+    Type: String
+    Default: 'rate(1 day)'
+    Description: 'EventBridge schedule expression'
+
+Resources:
+  S3BPASchedulerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: InvokeLambdaPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource: !GetAtt S3BPALambdaFunction.Arn
+
+  S3BPALambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: aws-security-toolkit-s3-bpa
+      Runtime: python3.9
+      Handler: aws_sec_toolkit.lambda_handlers.handler_s3_bpa.lambda_handler
+      Code:
+        ZipFile: |
+          # Placeholder - replace with actual deployment package
+          def lambda_handler(event, context):
+              return {'statusCode': 200, 'body': 'Not implemented'}
+      Timeout: 300
+
+  S3BPAScheduleRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: 'Scheduled S3 Block Public Access enforcement'
+      ScheduleExpression: !Ref ScheduleExpression
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt S3BPALambdaFunction.Arn
+          Id: S3BPATarget
+
+  S3BPALambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref S3BPALambdaFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt S3BPAScheduleRule.Arn
+
+Outputs:
+  LambdaFunctionArn:
+    Description: 'S3 BPA Lambda Function ARN'
+    Value: !GetAtt S3BPALambdaFunction.Arn

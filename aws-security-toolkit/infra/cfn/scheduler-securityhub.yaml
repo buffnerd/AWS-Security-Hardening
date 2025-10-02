@@ -1,0 +1,65 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'EventBridge scheduler for Security Hub enablement'
+
+Parameters:
+  ScheduleExpression:
+    Type: String
+    Default: 'rate(7 days)'
+    Description: 'EventBridge schedule expression'
+
+Resources:
+  SecurityHubSchedulerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: InvokeLambdaPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource: !GetAtt SecurityHubLambdaFunction.Arn
+
+  SecurityHubLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: aws-security-toolkit-securityhub
+      Runtime: python3.9
+      Handler: aws_sec_toolkit.lambda_handlers.handler_securityhub.lambda_handler
+      Code:
+        ZipFile: |
+          # Placeholder - replace with actual deployment package
+          def lambda_handler(event, context):
+              return {'statusCode': 200, 'body': 'Not implemented'}
+      Timeout: 300
+
+  SecurityHubScheduleRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: 'Scheduled Security Hub enablement'
+      ScheduleExpression: !Ref ScheduleExpression
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt SecurityHubLambdaFunction.Arn
+          Id: SecurityHubTarget
+
+  SecurityHubLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref SecurityHubLambdaFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt SecurityHubScheduleRule.Arn
+
+Outputs:
+  LambdaFunctionArn:
+    Description: 'Security Hub Lambda Function ARN'
+    Value: !GetAtt SecurityHubLambdaFunction.Arn

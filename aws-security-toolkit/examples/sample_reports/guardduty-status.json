@@ -1,0 +1,17 @@
+{
+  "timestamp": "2024-10-02T14:30:00Z",
+  "scan_type": "guardduty_status",
+  "results": {
+    "us-east-1": "ENABLED",
+    "us-west-2": "ENABLED", 
+    "eu-west-1": "ENABLED",
+    "ap-southeast-1": "DISABLED",
+    "ca-central-1": "ENABLED"
+  },
+  "summary": {
+    "total_regions": 5,
+    "enabled_regions": 4,
+    "disabled_regions": 1,
+    "coverage_percentage": 80
+  }
+}
